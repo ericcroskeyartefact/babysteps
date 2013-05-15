@@ -23,17 +23,45 @@
     }
   })
   
-  var abook = new Book({
+  var book = new Book({
     title:"New title",
     author:"Another Guy",
     releaseDate:"Long ago",
-    keywords:"Javasciprt programme"
+    keywords:"Javasciprt pogrom"
   });
   
-  var abookView = new BookView({
-    model: abook
+  var bookView = new BookView({
+    model: book
   })
   
-  $("#books").append(abookView.render().el);
+  var Library = Backbone.Collection.extend({
+    model:Book
+  })
+  
+  var LibraryView = Backbone.View.extend({
+    el:$("#books"),
+    
+    initialize:function() {
+      this.collection = new Library(books);
+      this.render();
+    },
+    
+    render: function(){
+      var self = this;
+      _.each(this.collection.models, function(itm) {
+        self.renderBook(item);
+      }, this);
+    },
+    
+    renderBook:function(item) {
+      var bookView = new BookView({
+        model:item
+      });
+      this.$el.append(bookView.render().el);
+    }
+    
+  })
+  
+  $("#books").append(bookView.render().el);
   
 })(jQuery);
