@@ -1,0 +1,129 @@
+<%= "var productionBuild = true;" if Rails.application.config.production_env == true %>
+<%= "var productionBuild = false;" if Rails.application.config.production_env != true %>
+
+<%= "var localBuild = true;" if Rails.env.development? %>
+<%= "var localBuild = false;" unless Rails.env.development? %>
+
+<%= "var DISABLE_XHR_CACHING = #{Rails.application.config.disable_xhr_caching};" %>
+
+<%= "var DISABLE_SESSION_CACHING = #{Rails.application.config.disable_session_caching};" %>
+
+<%= "var DISABLE_UTILIZATION_REPORTS = #{Rails.application.config.disable_utilization_reports_tmp};" %>
+
+<%= "var TRACE_API_CALLS = #{Rails.application.config.trace_api_calls};" %>
+
+var SERVICE_BASE_URL = window.location.protocol + '//' + window.location.host + '/api';
+var TRIAL_GRACE_PERIOD_DAYS = 7;
+
+I18n.fallbacks = true;
+if (getCookie(AppCookie.Locale))
+  I18n.locale = getCookie(AppCookie.Locale);  
+else
+  I18n.locale = "en";
+
+var available_locales = [
+                          {code: "en-AU", label: "Australia"},
+                          {code: "de-AT", label: "Austria"},
+                          {code: "pt-BR", label: "Brazil"},
+                          {code: "en-CA", label: "Canada"},
+                          {code: "zh-CN", label: "China"},
+                          {code: "da", label: "Denmark"},
+                          {code: "fi", label: "Finland"},
+                          {code: "fr", label: "France"},
+                          {code: "de", label: "Germany"},
+                          {code: "en-IN", label: "India"},
+                          {code: "en-ID", label: "Indonesia"},
+                          {code: "en-IR", label: "Ireland"},
+                          {code: "it", label: "Italy"},
+                          {code: "ja", label: "日本"},
+                          {code: "ko", label: "한국의"},
+                          {code: "es-MX", label: "Mexico"},
+                          {code: "nl", label: "Netherlands"},
+                          {code: "nn", label: "Norway"},
+                          {code: "pl", label: "Poland"},
+                          {code: "pt-PT", label: "Portugal"},
+                          {code: "ru", label: "Russia"},
+                          {code: "en-ZA", label: "South Africa"},
+                          {code: "es", label: "Spain"},
+                          {code: "sv-SE", label: "Sweden"},
+                          {code: "de-CH", label: "Switzerland"},
+                          {code: "zh-TW", label: "Taiwan"},
+                          {code: "en-GB", label: "United Kingdom"},
+                          {code: "en-US", label: "United States"}
+                        ];
+
+
+var Z_POPUP = 100;
+var Z_TIME_UNIT_BUTTONS = 50;
+var Z_NAVIGATION_BUTTONS = 50;
+var Z_TIME_SLIDER = 40;
+var Z_PROJECT_BAR = 35;
+var Z_ROW_HEADER = 30;
+var Z_GRID_LINES = 20;
+var Z_ASSIGNMENT_SELECTED = 10;
+var Z_ASSIGNMENT = 1;
+var Z_GRID_FREE_TIME_MASK = 0;
+
+function alreadySignedIn() {
+  return getCookie(AppCookie.AuthToken) && !cookiesAreInvalid();
+}
+
+function requireAuthToken()
+{
+  var hasToken = getCookie(AppCookie.AuthToken) || getParam('auth_token');
+  if (!hasToken || cookiesAreInvalid()) {
+    deleteAllCookiesButLoginName();
+    window.location = "/signin";
+  }
+}
+
+function signOut()
+{
+  deleteAllCookies();
+  sessionStorage.clear();
+}
+
+platform = {};
+platform.touch = false;
+
+
+if ( false ) //( "ontouchstart" in window )
+{
+  platform.touch = true;
+  platform.click = "touchstart";
+  platform.mouseDown = "touchstart";
+  platform.mouseUp = "touchend";
+  platform.dragstart = "touchstart";
+  platform.drag = "touchmove";
+  platform.dragend = "touchend";
+} 
+else if (false) //(window.navigator.msPointerEnabled)
+{
+  platform.touch = true;
+  platform.click = "click";
+  platform.mouseDown = "MSPointerDown";
+  platform.mouseUp = "MSPointerUp";
+  platform.dragstart = "MSPointerDown";
+  platform.drag = "MSPointerMove";
+  platform.dragend = "MSPointerUp";
+}
+else
+{
+  platform.click = "click";
+  platform.mouseDown = "mousedown";
+  platform.mouseUp = "mouseup";
+  platform.dragstart = "mousedown";
+  platform.drag = "mousemove";
+  platform.dragend = "mouseup";
+}
+
+
+// Transform properties for different browsers
+transformPropertyNames = [
+  "MozTransform",
+  "webkitTransform",
+  "OTransform",
+  "msTransform"
+];
+
+
